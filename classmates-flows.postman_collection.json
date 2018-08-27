@@ -1,0 +1,1940 @@
+{
+	"info": {
+		"name": "classmates-flows",
+		"_postman_id": "815f0e9f-e354-991b-5ea9-e5550ec38d01",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreatingCourses",
+			"description": "",
+			"item": [
+				{
+					"name": "Lector Sign up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b9215e1-16fc-47b0-a453-0d03df5b6423",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"    var schema = ",
+									"    {",
+									"        \"items\": {",
+									"            \"first_name\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"last_name\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"email\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"password\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        }",
+									"   };",
+									"",
+									"postman.setGlobalVariable(\"СommonTestsForSuccessfullResponce\", () => {",
+									"",
+									"  it('Common Case 1: should return one of success responces with 200, 201 or 202 status code', () => {",
+									"        response.status.should.be.oneOf([201, 200, 202]); ",
+									"  });",
+									"",
+									"  it('Common Case 2: should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"  it('Common Case 3: should return OK message in response', () => {",
+									"     response.ok.should.be.true;",
+									"  });",
+									"  ",
+									"});",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									" ",
+									" it('Test 1: should return valid Responce schema', () => {",
+									"        //response.body.should.have.property('id');",
+									"        tv4.validate(response.body, schema).should.be.true;",
+									"      });",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"lector-token\", response.body.token);",
+									"postman.setEnvironmentVariable(\"lector-name\", response.body.part_email);",
+									"postman.setEnvironmentVariable(\"lector-username\", response.body.email);",
+									"postman.setEnvironmentVariable(\"lector-password\", \"123456\");",
+									"  ",
+									"// Next Request that should be run",
+									"postman.setNextRequest(\"Lector Login\");",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"type": "text",
+									"value": "John"
+								},
+								{
+									"key": "last_name",
+									"type": "text",
+									"value": "Johnson"
+								},
+								{
+									"key": "email",
+									"type": "text",
+									"value": "lector.{{$randomInt}}@gmail.com"
+								},
+								{
+									"key": "user_photo",
+									"type": "file",
+									"value": ""
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "password_confirmation",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "phone",
+									"type": "text",
+									"value": "342343432"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/sign_up",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"sign_up"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Lector Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c412a41-6a20-47c4-bb99-683c25694211",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"var lectorEmail = pm.environment.get(\"lector-username\");",
+									"var lectorName = pm.environment.get(\"lector-name\");",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('Test 1: should return the correct User Name', () => {",
+									"    response.body.first_name.should.equal('John'); ",
+									"  });",
+									"  ",
+									"   it('Test 2: should return the correct User Surname', () => {",
+									"    response.body.last_name.should.equal('Johnson'); ",
+									"  });",
+									"    ",
+									"   it('Test 3: should return the correct Email', () => {",
+									"    response.body.email.should.equal(lectorEmail); ",
+									"  });",
+									"  ",
+									"  it('Test 4: should return the correct Phone', () => {",
+									"    response.body.phone.should.equal('342343432'); ",
+									"  });",
+									"  ",
+									"  it('Test 5: User Type should be simple user', () => {",
+									"    response.body.type.should.equal('user'); ",
+									"  });",
+									"  ",
+									"  it('Test 6: User should not be belonged to any Company', () => {",
+									"    response.body.company_id.should.equal(0); ",
+									"  });",
+									"  ",
+									"  it('Test 7: first part of email should be returned as separate parameter', () => {",
+									"    response.body.part_email.should.equal(lectorName); ",
+									"  });",
+									"  ",
+									"  it('Test 8: User should be active by default', () => {",
+									"    response.body.status.should.equal(1); ",
+									"  });",
+									"  ",
+									"  postman.setEnvironmentVariable(\"lector-token\", response.body.token);",
+									"",
+									"",
+									"  postman.setNextRequest(\"Get Categories List\");",
+									"  ",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"type": "text",
+									"value": "{{lector-username}}"
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "{{lector-password}}"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/login",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Categories List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "439b6cbd-eb36-402f-a8d6-640c275804ed",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"postman.setGlobalVariable(\"СommonTestsForSuccessfullResponce\", () => {",
+									"",
+									"  it('Common Case 1: should return one of success responces with 200, 201 or 202 status code', () => {",
+									"        response.status.should.be.oneOf([201, 200, 202]); ",
+									"  });",
+									"",
+									"  it('Common Case 2: should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"  it('Common Case 3: should return OK message in response', () => {",
+									"     response.ok.should.be.true;",
+									"  });",
+									"  ",
+									"   it('Common Case 4: should return no empty Body', () => {",
+									"     response.body.should.not.be.empty;",
+									"  });",
+									"  ",
+									"});",
+									"",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"describe('Get Categories list', () => {",
+									"",
+									"  it('should return an array of categories with at lest 1 value', () => {",
+									"\t response.body.should.be.an('array').with.length.at.least(1);",
+									"    });",
+									"",
+									"});",
+									"",
+									"var categories = eval(globals.loadHelpers);",
+									"categories.verifyCount(10);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4492082a-e9cf-4c55-9c64-a66b511f67fc",
+								"type": "text/javascript",
+								"exec": [
+									"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+									"    let categories = {};",
+									" ",
+									"    categories.verifyCount = function verifyCount(expectedCount) {",
+									"        var jsonData = JSON.parse(responseBody);",
+									"        tests[\"Categories cloud of Tags is counted to : \" + expectedCount] ",
+									"            = jsonData.length === expectedCount;",
+									"    }",
+									"",
+									"    return categories;",
+									"} + '; loadHelpers();');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/category/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"category",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b8dd2a83-8d47-434b-ba2d-7074dcd684da",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{lector-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/profile/info",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"profile",
+								"info"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ceec1467-b95a-4277-b26f-f8347ffcac63",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"eval(globals.postmanBDD);",
+									"",
+									"var privacies = pm.environment.get(\"privacies\");",
+									"var privacy = pm.environment.get(\"privacy\");",
+									"var ext_api = pm.environment.get(\"ext_api\");",
+									"",
+									"var schema = {",
+									"  \"items\": {",
+									"    \"id\": \"string\"",
+									"  }",
+									"};",
+									"",
+									"if(privacies && privacies.length > 0) {",
+									"    postman.setNextRequest('Create Course');",
+									"    ",
+									"    } else {",
+									"    \tpostman.setNextRequest(null);",
+									"\t}",
+									"\t",
+									"// Running Common set of test cases",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"\tdescribe('Get Course after its registration', () => {",
+									"          ",
+									"          it('Test 1: should return the not empty course id', () => {",
+									"            response.body.should.have.property('id');",
+									"          });",
+									"          ",
+									"          it('Test 2: should return valid Responce schema', () => {",
+									"            //response.body.should.have.property('id');",
+									"            tv4.validate(response.body, schema).should.be.true;",
+									"          });",
+									"",
+									"        });",
+									"    ",
+									"",
+									"pm.environment.set(privacy+\"-course-id\", response.body.id);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d381d699-48a0-491f-b31f-32dbfe81ba1b",
+								"type": "text/javascript",
+								"exec": [
+									"var privacies = pm.environment.get(\"privacies\");",
+									"",
+									"if(!privacies) { ",
+									"\tprivacies = [\"public\", \"private\", \"protected\"];",
+									"\t} else if(privacies.length == 0) {",
+									"\t   privacies = [\"public\", \"private\", \"protected\"]; ",
+									"\t}",
+									"\t",
+									"var currentPrivacy = privacies.shift();",
+									"",
+									"pm.environment.set(\"privacy\", currentPrivacy);",
+									"pm.environment.set(\"privacies\", privacies);"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{lector-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Representational state transfer (REST) is a stateless software architecture",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"value": "",
+									"type": "file",
+									"src": "files/image-cover-1.jpg"
+								},
+								{
+									"key": "thumb_image",
+									"value": "",
+									"type": "file",
+									"src": "files/image-cover-1.jpg"
+								},
+								{
+									"key": "video_cover",
+									"value": "",
+									"type": "file",
+									"src": "files/video-trailer-1.mp4"
+								},
+								{
+									"key": "industry_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Client-Server\nThe client-server constraint works on the concept that the client and the server should be separate from each other and allowed to evolve individually and independently. In other words, I should be able to make changes to my mobile application without impacting either the data structure or the database design on the server. At the same time, I should be able to modify the database or make changes to my server application without impacting the mobile client. This creates a separation of \nconcerns, letting each application grow and scale independently of the other and allowing your organization to grow quickly and efficiently.\n\nStateless\nREST APIs are stateless, meaning that calls can be made independently of one another, and each call contains all of the data necessary to complete itself successfully. A REST API should not rely on data being stored on the server or sessions to determine what to do with a call, but rather solely rely on the data that is provided in that call itself. Identifying information is not being stored on the server when making calls. Instead, each call has the necessary data in itself, such as the API key, access token, user ID, etc. This also helps increase the API’s reliability by having all of the data necessary to make the call, instead of relying on a series of calls with server state to create an object, which may result in partial fails. Instead, in order to reduce memory requirements and keep your application as scalable as possible, a RESTful API requires that any state is stored on the client—not on the server.\n\nCache\nBecause a stateless API can increase request overhead by handling large loads of incoming and outbound calls, a REST API should be designed to encourage the storage of cacheable data. This means that when data is cacheable, the response should indicate that the data can be stored up to a certain time (expires-at), or in cases where data needs to be real-time, that the response should not be cached by the client. By enabling this critical constraint, you will not only greatly reduce the number of interactions with your API, reducing internal server usage, but also provide your API users with the tools necessary to provide the fastest and most efficient apps possible. Keep in mind that caching is done on the client side. While you may be able to cache some data within your architecture to perform overall performance, the intent is to instruct the client on how it should proceed and whether or not the client can store the data temporarily.\n\nUniform Interface\nThe key to the decoupling client from server is having a uniform interface that allows independent evolution of the application without having the application’s services, models, or actions tightly coupled to the API layer itself. The uniform interface lets the client talk to the server in a single language, independent of the architectural backend of either. This interface should provide an unchanging, standardized means of communicating between the client and the server, such as using HTTP with URI resources, CRUD (Create, Read, Update, Delete), and JSON.\n\nLayered System\nAs the name implies, a layered system is a system comprised of layers, with each layer having a specific functionality and responsibility. If we think of a Model View Controller framework, each layer has its own responsibilities, with the models comprising how the data should be formed, the controller focusing on the incoming actions and the view focusing on the output. Each layer is separate but also interacts with the other. In REST API design, the same principle holds true, with different layers of the architecture working together to build a hierarchy that helps create a more scalable and modular application.\nA layered system also lets you encapsulate legacy systems and move less commonly accessed functionality to a shared intermediary while also shielding more modern and commonly used components from them. Additionally, the layered system gives you the freedom to move systems in and out of your architecture as technologies and services evolve, increasing flexibility and longevity as long as you keep the different modules as loosely coupled as possible. There are substantial security benefits of having a layered system since it allows you to stop attacks at the proxy layer, or within other layers, preventing them from getting to your actual server architecture. By utilizing a layered system with a proxy, or creating a single point of access, you are able to keep critical and more vulnerable aspects of your architecture behind a firewall, preventing direct interaction with them by the client. Keep in mind that security is not based on single “stop all” solution, but rather on having multiple layers with the understanding that certain security checks may fail or be bypassed. As such, the more security you are able to implement into your system, the more likely you are to prevent damaging Attacks.\n\nCode on Demand\nPerhaps the least known of the six constraints, and the only optional constraint, Code on Demand allows for code or applets to be transmitted via the API for use within the application. In essence, it creates a smart application that is no longer solely dependent on its own code structure. However, perhaps because it’s ahead of its time, Code on Demand has struggled for adoption as Web APIs are consumed across multiple languages and the transmission of code raises security questions and concerns. (For example, the directory would have to be writeable, and the firewall would have to let what may normally be restricted content through.)\nTogether, these constraints make up the theory of Representational State Transfer, or REST. As you look back through these you can see how each successive constraint builds on top of the previous, eventually creating a rather complex—but powerful and flexible—application program interface. But most importantly, these constraints make up a design that operates similarly to how we access pages in our browsers on the World Wide Web. It creates an API that is not dictated by its architecture, but by the representations that it returns, and an API that—while architecturally stateless—relies on the representation to dictate the application’s state.\n",
+									"type": "text"
+								},
+								{
+									"key": "categories_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "level",
+									"value": "beginner",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "lang",
+									"value": "English",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "privacy",
+									"value": "{{privacy}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/course/create",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"course",
+								"create"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GuestUserActivities",
+			"description": "",
+			"item": [
+				{
+					"name": "Get Categories List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c6e9dbb4-9a7c-4ec7-b9c9-4b960796cea7",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"var categories = eval(globals.loadHelpers);",
+									"",
+									"postman.setGlobalVariable(\"СommonTestsForSuccessfullResponce\", () => {",
+									"",
+									"  it('Common Case 1: should return one of success responces with 200, 201 or 202 status code', () => {",
+									"        response.status.should.be.oneOf([201, 200, 202]); ",
+									"  });",
+									"",
+									"  it('Common Case 2: should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"  it('Common Case 3: should return OK message in response', () => {",
+									"     response.ok.should.be.true;",
+									"  });",
+									"  ",
+									"});",
+									"",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"categories.verifyCount(10);",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4492082a-e9cf-4c55-9c64-a66b511f67fc",
+								"type": "text/javascript",
+								"exec": [
+									"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+									"    let categories = {};",
+									" ",
+									"    categories.verifyCount = function verifyCount(expectedCount) {",
+									"        var jsonData = JSON.parse(responseBody);",
+									"        tests[\"Categories cloud of Tags is counted to : \" + expectedCount] ",
+									"            = jsonData.length === expectedCount;",
+									"    }",
+									"",
+									"    return categories;",
+									"} + '; loadHelpers();');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/category/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"category",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for Courses by Industry [1]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "30731824-8214-4f1e-af65-9d6021c40457",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/search/course?industry_id=1",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"search",
+								"course"
+							],
+							"query": [
+								{
+									"key": "industry_id",
+									"value": "1",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for Courses by Industry [2]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8958ef30-9d92-49c2-8be9-1012acdaf529",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/search/course?industry_id=2",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"search",
+								"course"
+							],
+							"query": [
+								{
+									"key": "industry_id",
+									"value": "2",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for Courses by Industry [3]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c9701978-3c1a-459b-a445-8b8d0a4be189",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/search/course?industry_id=3",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"search",
+								"course"
+							],
+							"query": [
+								{
+									"key": "industry_id",
+									"value": "3",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3dd78533-3af0-4566-bdd2-bd9d73505c6e",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/courses/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"courses",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Public Course Preview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b4691bd6-1fa6-411d-8366-cbdffb11e644",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"// Define the JSON Schema",
+									"const courseDatailsSchema = {",
+									"  \"required\": [\"id\"],",
+									"  \"items\": {",
+									"    \"id\": {",
+									"      \"type\": \"string\"",
+									"    },",
+									"    \"user_id\": {",
+									"      \"type\": \"string\"",
+									"    },",
+									"    \"lang\": {",
+									"      \"type\": \"string\"",
+									"    }",
+									"  }",
+									"};",
+									"",
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"describe('Get Course info', () => {",
+									"",
+									"    it('Test 1: should return valid Responce schema', () => {",
+									"        tv4.validate(response.body, courseDatailsSchema).should.be.true;",
+									"    });",
+									"",
+									"    it('Test 2: should return the proper privacy', () => {",
+									"        response.body.privacy.should.be.oneOf(['public', 'private', 'protected']);",
+									"    });",
+									"",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/course/preview?course_id=1",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"course",
+								"preview"
+							],
+							"query": [
+								{
+									"key": "course_id",
+									"value": "1",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registered User Activities",
+			"description": "",
+			"item": [
+				{
+					"name": "Sign up via form",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b1b95b3-a0e0-4559-a491-f3c9729d9464",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"var test = pm.test;",
+									"var expect = pm.expect;",
+									"var response = pm.response;",
+									"var jsonResponse = response.json();",
+									"",
+									"/*test(\"schema is valid\", function() {",
+									"    var schema = ",
+									"    {",
+									"        \"required\": [",
+									"            \"first_name\",",
+									"            \"last_name\",",
+									"            \"email\",",
+									"            \"password\"",
+									"        ],",
+									"        \"properties\": {",
+									"            \"first_name\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"last_name\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"email\": {",
+									"                \"type\": \"string\"",
+									"            },",
+									"            \"password\": {",
+									"                \"type\": \"string\"",
+									"            }",
+									"        }",
+									"   };",
+									"    //var result = tv4.validateResult(jsonResponse, schema);",
+									"    expect(tv4.validate(jsonResponse, schema)).to.be.true;",
+									"});",
+									"*/",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"postman.setEnvironmentVariable(\"user-token\", jsonResponse.token);",
+									"postman.setEnvironmentVariable(\"user-name\", jsonResponse.part_email);",
+									"postman.setEnvironmentVariable(\"user-password\", \"123456\");",
+									"",
+									"// Next Request that should be run",
+									"postman.setNextRequest(\"Cannot use same Email twice\");",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"type": "text",
+									"value": "Ivan"
+								},
+								{
+									"key": "last_name",
+									"type": "text",
+									"value": "Ivanovich"
+								},
+								{
+									"key": "email",
+									"type": "text",
+									"value": "ivan.ivanovich{{$randomInt}}@gmail.com"
+								},
+								{
+									"key": "user_photo",
+									"type": "file",
+									"value": ""
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "password_confirmation",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "phone",
+									"type": "text",
+									"value": "342343432"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/sign_up",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"sign_up"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Cannot use same Email twice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d949b80-346a-4364-8039-76c7d582c586",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"if(responseBody.has(\"The email has already been taken.\")) {",
+									"  tests[\"Cannot Register using same Email twice\"] = responseBody.has(\"The email has already been taken.\");",
+									"}",
+									"",
+									"postman.setNextRequest(\"Login\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"type": "text",
+									"value": "Ivan"
+								},
+								{
+									"key": "last_name",
+									"type": "text",
+									"value": "Ivanovich"
+								},
+								{
+									"key": "email",
+									"type": "text",
+									"value": "{{user-name}}@gmail.com"
+								},
+								{
+									"key": "user_photo",
+									"type": "file",
+									"value": ""
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "password_confirmation",
+									"type": "text",
+									"value": "123456"
+								},
+								{
+									"key": "phone",
+									"type": "text",
+									"value": "342343432"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/sign_up",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"sign_up"
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "add720cd-a0b8-4f53-a751-38a54e08f1c0",
+							"name": "sign_up",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "Ivan",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "Ivanovich",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "ivan.ivanovichova@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "user_photo",
+											"type": "file",
+											"src": {
+												"0": {}
+											}
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "123456",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "342343432",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://diprella.selectotech.com/api/sign_up",
+									"protocol": "http",
+									"host": [
+										"diprella",
+										"selectotech",
+										"com"
+									],
+									"path": [
+										"api",
+										"sign_up"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"description": "",
+									"key": "Cache-Control",
+									"name": "Cache-Control",
+									"value": "private, must-revalidate"
+								},
+								{
+									"description": "",
+									"key": "Connection",
+									"name": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"description": "",
+									"key": "Content-Type",
+									"name": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"description": "",
+									"key": "Date",
+									"name": "Date",
+									"value": "Thu, 25 May 2017 20:25:51 GMT"
+								},
+								{
+									"description": "",
+									"key": "Server",
+									"name": "Server",
+									"value": "nginx"
+								},
+								{
+									"description": "",
+									"key": "Transfer-Encoding",
+									"name": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"description": "",
+									"key": "X-Powered-By",
+									"name": "X-Powered-By",
+									"value": "PleskLin"
+								},
+								{
+									"description": "",
+									"key": "X-RateLimit-Limit",
+									"name": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"description": "",
+									"key": "X-RateLimit-Remaining",
+									"name": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"description": "",
+									"key": "expires",
+									"name": "expires",
+									"value": "-1"
+								},
+								{
+									"description": "",
+									"key": "pragma",
+									"name": "pragma",
+									"value": "no-cache"
+								}
+							],
+							"cookie": [],
+							"body": "{\"token\":\"rVdLsNAOOduktgYvFsU6Z2c9Q6qm01U5EkCAdyhgRJjrgkU0bfbWRvqpJlrfd2vi\"}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4e3332c6-8edf-490d-8e6f-22852c4d1500",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('Test 1: should return the correct User Name', () => {",
+									"    response.body.first_name.should.equal('Ivan'); ",
+									"  });",
+									"  ",
+									"   it('Test 2: should return the correct User Surname', () => {",
+									"    response.body.last_name.should.equal('Ivanovich'); ",
+									"  });",
+									"    ",
+									"   it('Test 3: should return the correct Email', () => {",
+									"    response.body.email.should.equal('ivan.ivanovichova@gmail.com'); ",
+									"  });",
+									"  ",
+									"  it('Test 4: should return the correct Phone', () => {",
+									"    response.body.phone.should.equal('342343432'); ",
+									"  });",
+									"  ",
+									"  it('Test 5: User Type should be simple user', () => {",
+									"    response.body.type.should.equal('user'); ",
+									"  });",
+									"  ",
+									"  it('Test 6: User should not be belonged to any Company', () => {",
+									"    response.body.company_id.should.equal(0); ",
+									"  });",
+									"  ",
+									"  it('Test 7: first part of email should be returned as separate parameter', () => {",
+									"    response.body.part_email.should.equal('ivan.ivanovichova'); ",
+									"  });",
+									"  ",
+									"  it('Test 8: URL value should be as first part of email', () => {",
+									"    response.body.url.should.equal('ivan-ivanovichova'); ",
+									"  });",
+									"  ",
+									"  it('Test 9: User should be active by default', () => {",
+									"    response.body.status.should.equal(1); ",
+									"  });",
+									"  ",
+									"  postman.setEnvironmentVariable(\"user-token\", response.body.token);",
+									"",
+									"",
+									"  postman.setNextRequest(\"Incorrect Login\");",
+									"  ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"type": "text",
+									"value": "{{user-name}}@gmail.com"
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "123456"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/login",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Incorrect Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('should return a 200 response', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"",
+									"  it('should return the error message', () => {",
+									"    response.body.result.should.equal('wrong email or password.'); ",
+									"  });",
+									"  ",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"type": "text",
+									"value": "ivan-ivanovichova@gmail.com"
+								},
+								{
+									"key": "password",
+									"type": "text",
+									"value": "123456"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/login",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "If Username or Password is wrong or not provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Courses List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "70c8214b-5f93-4ae5-ab7d-4fcdf79991fd",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/courses/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"courses",
+								"list"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Categories List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b71df51-ed01-4826-aa9b-abaca7157603",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();",
+									"",
+									"var categories = eval(globals.loadHelpers);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('should return valid number of array values', () => {",
+									"    categories.verifyCount(10);",
+									"  });",
+									"",
+									"});",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4492082a-e9cf-4c55-9c64-a66b511f67fc",
+								"type": "text/javascript",
+								"exec": [
+									"postman.setGlobalVariable(\"loadHelpers\", function loadHelpers() {",
+									"    let categories = {};",
+									" ",
+									"    categories.verifyCount = function verifyCount(expectedCount) {",
+									"        var jsonData = JSON.parse(responseBody);",
+									"        tests[\"Categories cloud of Tags is counted to : \" + expectedCount] ",
+									"            = jsonData.length === expectedCount;",
+									"    }",
+									"",
+									"    return categories;",
+									"} + '; loadHelpers();');"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/category/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"category",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recommendations List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a9342e1-5016-4006-8388-1b02315164f9",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/recommendation/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"recommendation",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bookmarks List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0a831bda-cd6c-426b-9308-651ac1fe98eb",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/profile/boormarks/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"profile",
+								"boormarks",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Bookmark Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8fba1a84-aa80-4f41-b992-3f81b5249179",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "course_id",
+									"value": "{{course-id}}",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/profile/boormarks/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"profile",
+								"boormarks",
+								"list"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recommendations List 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "71edd4cb-ee23-4aaf-91e8-66613d76d7fb",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"// First, run the common tests",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/recommendation/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"recommendation",
+								"list"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c5fdda9c-eb22-4093-a538-a169eba78b91",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get PUBLIC course details for course details page', () => {",
+									"",
+									"  it('I should get a responce with 200 status code', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"   it('should return the Title with length less 100 chars', () => {",
+									"     response.body.title.should.be.a('string').with.length.below(100);",
+									"  });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "course_id",
+									"value": "23",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ext_api}}/get/course?course_id={{public-course-id}}",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"get",
+								"course"
+							],
+							"query": [
+								{
+									"key": "course_id",
+									"value": "{{public-course-id}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recommendations List 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da407831-5bd2-43dd-9f97-4c203021f6c9",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('I should get a responce with 200 status code', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/recommendation/list",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"recommendation",
+								"list"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Modules List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da407831-5bd2-43dd-9f97-4c203021f6c9",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('I should get a responce with 200 status code', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/course/module/list&course_id={{public-course-id}}",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"course",
+								"module",
+								"list&course_id={{public-course-id}}"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Module Events",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da407831-5bd2-43dd-9f97-4c203021f6c9",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('I should get a responce with 200 status code', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/module/event/get&course_id={{public-course-id}}",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"module",
+								"event",
+								"get&course_id={{public-course-id}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile Subscription Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "da407831-5bd2-43dd-9f97-4c203021f6c9",
+								"type": "text/javascript",
+								"exec": [
+									"// Load Postman BDD",
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Get user info after Login', () => {",
+									"",
+									"  it('I should get a responce with 200 status code', () => {",
+									"    response.should.have.status(200);",
+									"  });",
+									"",
+									"  it('should return a JSON response', () => {",
+									"    response.should.be.json;",
+									"  });",
+									"  ",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{user-token}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/profile/subscribe/check&course_id={{public-course-id}}",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"profile",
+								"subscribe",
+								"check&course_id={{public-course-id}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course Modules list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3b62c8cd-2d35-445b-b6f6-64e5658e5f4e",
+								"type": "text/javascript",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"eval(globals.СommonTestsForSuccessfullResponce)();"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ext_api}}/course/module/list?course_id={{public-course-id}}",
+							"host": [
+								"{{ext_api}}"
+							],
+							"path": [
+								"course",
+								"module",
+								"list"
+							],
+							"query": [
+								{
+									"key": "course_id",
+									"value": "{{public-course-id}}",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Enrolling to Courses",
+			"description": "",
+			"item": []
+		},
+		{
+			"name": "Course-passing",
+			"description": "",
+			"item": []
+		},
+		{
+			"name": "Course-managment",
+			"description": "",
+			"item": []
+		}
+	]
+}
