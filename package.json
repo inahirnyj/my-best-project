@@ -1,0 +1,12 @@
+{
+  "name": "postman-echo",
+  "version": "1.0.0",
+  "description": "postman-echo tests api",
+  "scripts": {
+    "api-test": "newman tests run"
+  },
+  "author": "Ivan Nahirnyy",
+  "dependencies": {
+    "newman": "^4.1.0"
+  }
+}
